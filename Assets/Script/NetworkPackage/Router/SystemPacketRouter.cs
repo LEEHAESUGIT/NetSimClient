@@ -37,7 +37,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Router
 					action.Invoke(context);
 				}
 			}
-			catch (Exception) { }
+			catch (Exception ex) { Console.WriteLine($"[Error] : {ex}"); }
 
 
 		}

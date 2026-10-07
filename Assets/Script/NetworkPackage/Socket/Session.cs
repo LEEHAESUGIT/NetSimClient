@@ -76,8 +76,9 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Socket
 					this._stream = _client.GetStream();
 					break;
 				}
-				catch (Exception)
+				catch (Exception ex)
 				{
+					Console.WriteLine($"[Error] : {ex}");
 					_client?.Close();
 					_client = null;
 					try

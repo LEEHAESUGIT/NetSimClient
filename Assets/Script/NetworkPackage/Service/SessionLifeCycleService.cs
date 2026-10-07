@@ -63,7 +63,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Service
 			{
 				_sessionManager.ActiveSession(portNum, modulePipe, shutDownToken);
 			}
-			catch (Exception) { }
+			catch (Exception ex) { Console.WriteLine($"[Error] : {ex}"); }
 		}
 		internal void OnSessionDisconnected(int sessionID)
 		{

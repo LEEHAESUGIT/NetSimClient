@@ -78,8 +78,9 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Manager
 				player = null;
 				return false;
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
+				Console.WriteLine($"[Error] : {ex}");
 				player = null;
 				//issuancePlayerID = -1;
 				return false;
@@ -100,8 +101,9 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Manager
 				return false;
 
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
+				Console.WriteLine($"[Error] : {ex}");
 				return false;
 			}
 

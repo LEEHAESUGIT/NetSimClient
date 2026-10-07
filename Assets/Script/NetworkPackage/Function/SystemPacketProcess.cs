@@ -69,7 +69,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Function
 					}
 				}
 			}
-			catch (Exception) { }
+			catch (Exception ex) { Console.WriteLine($"[Error] : {ex}"); }
 		}
 
 
