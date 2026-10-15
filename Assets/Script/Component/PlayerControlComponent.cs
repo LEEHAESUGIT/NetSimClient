@@ -50,7 +50,7 @@ namespace NETSIM_Ver2.Assets.Script.Component
 
 			_gamePacketPipe.OutBoundPipe.TryWrite(new ResultPacketContext
 			{
-				Packet = new C2S_MovePacket(player.PlayerData.ClientInfo.PlayerID , currentFlag ,0 , 0)
+				Packet = new C2S_MovePacket(player.PlayerData.ClientInfo.PlayerID , currentFlag)
 			});
 
 			Vector3 moveDir = FlagToVector(currentFlag);

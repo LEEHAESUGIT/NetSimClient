@@ -17,6 +17,8 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.MetaData.Enum
 		S_Spawn = 1,
 		S_Move = 2,
 
+		S_Transform = 11,
+
 		C_Spawn = 51,
 		C_Move = 52,
 

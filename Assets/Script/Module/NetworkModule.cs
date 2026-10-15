@@ -5,6 +5,7 @@
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Manager;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Pipe;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Service;
+using System.Net.Sockets;
 using System.Threading;
 
 namespace NETSIM_Ver2.Assets.Script.Module
@@ -51,8 +52,8 @@ namespace NETSIM_Ver2.Assets.Script.Module
 		}
 		internal void Stop()
 		{
-
-
+			_sessionManager.DeactivationSession();
+			
 		}
 
 

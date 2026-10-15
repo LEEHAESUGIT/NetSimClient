@@ -17,17 +17,13 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 
 		public int PlayerID;
 		public EMoveDirFlag MoveFlag;
-		public float PosX;
-		public float PosZ;
 
 
 
-		public C2S_MovePacket(int playerID, EMoveDirFlag moveFlag, float posX, float posZ)
+		public C2S_MovePacket(int playerID, EMoveDirFlag moveFlag)
 		{
 			this.PlayerID = playerID;
 			this.MoveFlag = moveFlag;
-			this.PosX = posX;
-			this.PosZ = posZ;
 		}
 
 
@@ -35,17 +31,13 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 		{
 			writer.Write(this.PlayerID);
 			writer.Write((byte)this.MoveFlag);
-			writer.Write(this.PosX);
-			writer.Write(this.PosZ);
 		}
 		public static C2S_MovePacket Deserialize(PacketReader reader)
 		{
 			return new C2S_MovePacket
 			{
 				PlayerID = reader.ReadInt(),
-				MoveFlag = (EMoveDirFlag)reader.ReadUshort(),
-				PosX = reader.ReadFloat(),
-				PosZ = reader.ReadFloat()
+				MoveFlag = (EMoveDirFlag)reader.ReadUshort()
 			};
 		}
 	}
@@ -56,15 +48,11 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 
 		public int PlayerID;
 		public EMoveDirFlag MoveFlag;
-		public float PosX;
-		public float PosZ;
 
-		public S2C_MovePacket(int playerID, EMoveDirFlag moveFlag, float posX, float posZ)
+		public S2C_MovePacket(int playerID, EMoveDirFlag moveFlag)
 		{
 			this.PlayerID = playerID;
 			this.MoveFlag = moveFlag;
-			this.PosX = posX;
-			this.PosZ = posZ;
 		}
 
 
@@ -72,17 +60,13 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 		{
 			writer.Write(this.PlayerID);
 			writer.Write((byte)this.MoveFlag);
-			writer.Write(this.PosX);
-			writer.Write(this.PosZ);
 		}
 		public static S2C_MovePacket Deserialize(PacketReader reader)
 		{
 			return new S2C_MovePacket
 			{
 				PlayerID = reader.ReadInt(),
-				MoveFlag = (EMoveDirFlag)reader.ReadUshort(),
-				PosX = reader.ReadFloat(),
-				PosZ = reader.ReadFloat()
+				MoveFlag = (EMoveDirFlag)reader.ReadUshort()
 			};
 		}
 	}

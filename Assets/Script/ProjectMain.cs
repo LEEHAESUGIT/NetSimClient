@@ -14,29 +14,30 @@ namespace NETSIM_Ver2.Assets.Script
 	{
 		private CancellationTokenSource _projectCTS;
 		private ModulePipe _modulePipe;
-
-
+		private NetworkModule _networkModule;
 
 		public GameBehaviour GameBehaviour;
-		public NetworkBehaviour NetworkBehaviour;
-
+		
 		private void Awake()
 		{
-			_projectCTS = new CancellationTokenSource();
+			this._projectCTS = new CancellationTokenSource();
 			this._modulePipe = new ModulePipe();
+			this._networkModule = new NetworkModule(_modulePipe , _projectCTS);
 
-			this.NetworkBehaviour.Init(_modulePipe , _projectCTS);
 			this.GameBehaviour.Init(_modulePipe.GamePacketPipe , _projectCTS);
-			//this.NetManager.Init(_ingameProcessPipe);
 		}
 
 		private void Start()
 		{
-
-			this.NetworkBehaviour.CallStart();
+			this._networkModule.Strart();
 			this.GameBehaviour.CallStart();
-			
 		}
+
+		private void OnApplicationQuit()
+		{
+			this._networkModule.Stop();
+		}
+
 
 	}
 

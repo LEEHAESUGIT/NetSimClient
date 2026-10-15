@@ -1,3 +1,4 @@
+using NETSIM_Ver2.Assets.Script.Configration;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Context;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Manager;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.MetaData.Enum;
@@ -12,6 +13,7 @@ using System.Buffers.Binary;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -94,8 +96,11 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Socket
 			}
 			if (_stream != null && !_sessionCts.IsCancellationRequested)
 			{
-
+				_ = SendLoopAsync();
 				_ = ReceivedLoopAsync();
+
+				// TODO 
+				// 패킷 전송 타이밍을 세션내부가 아닌 외부에서 
 
 				long unixTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 				_modulePipe.SystemPacketPipe.OutBoundPipe.TryWrite(
@@ -139,23 +144,61 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Socket
 			this._sessionCts.Dispose();
 
 			this._modulePipe = null;
+
+			this._packetBuffer.Recv.Clear();
+		
+			ClearSendPipe();
+
+			LastHeartBeatTime = DateTime.MinValue;
 		}
 
-		internal async Task<bool> Send(ReadOnlyMemory<byte> packetData)
+
+
+
+
+
+
+		//internal async Task<bool> Send(ReadOnlyMemory<byte> packetData)
+		//{
+		//	try
+		//	{
+		//		if (this._disconnectedLock == 1)
+		//			return false;
+		//		await _stream.WriteAsync(packetData);
+		//		return true;
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		UnityEngine.Debug.LogException(ex);
+		//		return false;
+		//	}
+		//}
+
+
+		private Channel<ReadOnlyMemory<byte>> _sendPipe = Channel.CreateUnbounded<ReadOnlyMemory<byte>>();
+		internal bool InputPacketData(ReadOnlyMemory<byte> context) => _sendPipe.Writer.TryWrite(context);
+		private void ClearSendPipe()
 		{
-			try
+			while (_sendPipe.Reader.TryRead(out _)) { }
+		}
+		private async Task SendLoopAsync()
+		{
+			while (await _sendPipe.Reader.WaitToReadAsync(_loopToken))
 			{
-				if (this._disconnectedLock == 1)
-					return false;
-				await _stream.WriteAsync(packetData);
-				return true;
-			}
-			catch (Exception ex)
-			{
-				UnityEngine.Debug.LogException(ex);
-				return false;
+				while (_sendPipe.Reader.TryRead(out ReadOnlyMemory<byte> packetData))
+				{
+					if (_disconnectedLock == 1) return;
+
+					await _stream.WriteAsync(packetData);
+				}
 			}
 		}
+
+
+
+
+
+
 		private async Task ReceivedLoopAsync()
 		{
 			try
@@ -203,7 +246,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Socket
 				// 헤더 크기 파싱
 				ushort PacketSize = BinaryPrimitives.ReadUInt16LittleEndian(_packetBuffer.Recv.ReadSpace);
 
-				if (PacketSize >= 4096)
+				if (PacketSize >= ServerConfigurationData.MaxPacketSize)
 				{
 					//Disconnect();
 					return;

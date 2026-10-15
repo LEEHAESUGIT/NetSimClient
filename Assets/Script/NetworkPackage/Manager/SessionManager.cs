@@ -26,21 +26,19 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Manager
 
 		internal Session LiveSession { get => _session; }
 
-
-	
 		internal SessionManager()
 		{
 			_session = new Session();
 
 		}
 
-		internal void ActiveSession(int portNum , ModulePipe modulePipe,  CancellationToken shutDownToken)
+		internal void ActivationSession(int portNum , ModulePipe modulePipe,  CancellationToken shutDownToken)
 		{
 			_session.Init(modulePipe , shutDownToken);
 
 			_ = _session.Start(portNum);
 		}
-		internal void Stop()
+		internal void DeactivationSession()
 		{
 			_session.Disconnect();
 		}

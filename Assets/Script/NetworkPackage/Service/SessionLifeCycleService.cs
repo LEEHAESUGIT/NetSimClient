@@ -61,13 +61,13 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Service
 		{
 			try
 			{
-				_sessionManager.ActiveSession(portNum, modulePipe, shutDownToken);
+				_sessionManager.ActivationSession(portNum, modulePipe, shutDownToken);
 			}
 			catch (Exception ex) { Console.WriteLine($"[Error] : {ex}"); }
 		}
-		internal void OnSessionDisconnected(int sessionID)
+		internal void OnSessionDisconnected()
 		{
-			_sessionManager.Stop();
+			_sessionManager.DeactivationSession();
 		}
 
 

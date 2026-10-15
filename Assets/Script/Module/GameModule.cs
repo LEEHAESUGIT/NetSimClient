@@ -27,25 +27,25 @@ namespace NETSIM_Ver2.Assets.Script.Module
 		// Service
 		private GamePacketApplyService _gamePacketApplyService;
 
-		private GameManager _gameManager;
+		//private GameManager _gameManager;
 
-		internal GameModule(GameManager gameManager, GamePacketPipe gamePacketPipe, CancellationTokenSource clientCTS)
+		internal GameModule(GamePacketPipe gamePacketPipe, CancellationTokenSource clientCTS)
 		{
 			// Local
 			this._cts = clientCTS;
 
 			// Manager
 			this._playerManager = new PlayerManager();
-			this._gameManager = gameManager;
+			//this._gameManager = gameManager;
 
 			// Pipe
 			this._gamePacketPipe = gamePacketPipe;
 
 			// Service
-			this._gamePacketApplyService = new GamePacketApplyService(gameManager, _playerManager, _gamePacketPipe);
+			//this._gamePacketApplyService = new GamePacketApplyService(gameManager, _playerManager, _gamePacketPipe);
 
 
-			this._gameManager.Init(_playerManager, gamePacketPipe);
+			//this._gameManager.Init(_playerManager, gamePacketPipe);
 
 		}
 
@@ -58,15 +58,12 @@ namespace NETSIM_Ver2.Assets.Script.Module
 			});
 		}
 
-		internal void Stop()
+
+		internal void OnTick(float targetTickMs)
 		{
 
 		}
 
 
-
 	}
-
-
-
 }

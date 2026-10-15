@@ -68,5 +68,10 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Socket.Buffer
 			_readPos = 0;
 			_writePos = dataSize;
 		}
+		internal void Clear()
+		{
+			_readPos = 0;
+			_writePos = 0;
+		}
 	}
 }

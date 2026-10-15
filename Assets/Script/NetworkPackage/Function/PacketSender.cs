@@ -39,20 +39,6 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Function
 			_ = GameSendLoopAsync(shutDownToken);
 		}
 
-
-		internal void UniCast(IPacket packet)
-		{
-			ReadOnlyMemory<byte> packetData = _formatter.Format(packet);
-
-			_sessionManager.TryExcute(session =>
-			{
-				_ = session.Send(packetData);
-			});
-
-		}
-
-
-
 		private async Task SystemSendLoopAsync(CancellationToken shutDownToken)
 		{
 			while (!shutDownToken.IsCancellationRequested)
@@ -80,8 +66,19 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Function
 			}
 		}
 
+		internal void UniCast(IPacket packet)
+		{
+			try
+			{
+				ReadOnlyMemory<byte> packetData = _formatter.Format(packet);
 
-
+				_sessionManager.TryExcute(session =>
+				{
+					session.InputPacketData(packetData);
+				});
+			}
+			catch (Exception ex) { }
+		}
 
 
 	}
