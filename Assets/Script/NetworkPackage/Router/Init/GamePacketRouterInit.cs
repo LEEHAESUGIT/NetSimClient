@@ -22,7 +22,8 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Router.Init
 
 			var tempHandlerMap = new Dictionary<EPacketID, Action<ReceivePacketContext>>();
 			// Add HanlderAction;
-			tempHandlerMap.Add(EPacketID.S_Spawn, (packet) => _ingameHandle.SpawnResponseHandle(packet));
+			tempHandlerMap.Add(EPacketID.S_PlayableObjectSpawn, (packet) => _ingameHandle.PlayableObjectSpawnResponseHandle(packet));
+			tempHandlerMap.Add(EPacketID.S_NonPlayableObjectSpawn, (packet) => _ingameHandle.NonPlayableObjectSpawnResponseHandle(packet));
 			tempHandlerMap.Add(EPacketID.S_Move, (packet) => _ingameHandle.PlayerMoveHandle(packet));
 			tempHandlerMap.Add(EPacketID.S_Transform, (packet) => _ingameHandle.TransformInterpolationHandle(packet));
 

@@ -104,14 +104,14 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Socket
 				_modulePipe.SystemPacketPipe.OutBoundPipe.TryWrite(
 					new ResultPacketContext
 					{
-						Packet = new C2SHeartBeat(unixTime, 0, 0)
+						Packet = new C2S_InitRequest()
 					});
-
 				_modulePipe.SystemPacketPipe.OutBoundPipe.TryWrite(
 					new ResultPacketContext
 					{
-						Packet = new C2S_InitRequest()
+						Packet = new C2SHeartBeat(unixTime, 0, 0)
 					});
+
 			}
 		}
 

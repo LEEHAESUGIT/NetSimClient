@@ -37,6 +37,9 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Manager
 			_session.Init(modulePipe , shutDownToken);
 
 			_ = _session.Start(portNum);
+
+
+
 		}
 		internal void DeactivationSession()
 		{

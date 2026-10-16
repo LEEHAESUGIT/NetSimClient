@@ -21,7 +21,7 @@ namespace NETSIM_Ver2.Assets.Script.Module
 		private SessionLifeCycleService _sessionLifeCycleService;
 		private PacketService _packetService;
 
-		internal NetworkModule(ModulePipe modulePipe , CancellationTokenSource clientCTS)
+		internal NetworkModule(ModulePipe modulePipe, CancellationTokenSource clientCTS)
 		{
 			// Local
 			this._cts = clientCTS;
@@ -33,19 +33,24 @@ namespace NETSIM_Ver2.Assets.Script.Module
 			this._moudlePipe = modulePipe;
 
 			// Service
-			this._sessionLifeCycleService = new SessionLifeCycleService(_sessionManager , _moudlePipe);
-			this._packetService = new PacketService(_sessionManager , _moudlePipe);
+			this._sessionLifeCycleService = new SessionLifeCycleService(_sessionManager, _moudlePipe);
+			this._packetService = new PacketService(_sessionManager, _moudlePipe);
 		}
 
-		internal void Start()
+		internal bool Start()
 		{
-			this._sessionLifeCycleService.Start(9999,_cts.Token);
-			this._packetService.Start(_cts.Token);
+			if (!_cts.IsCancellationRequested)
+			{
+				this._sessionLifeCycleService.Start(9999, _cts.Token);
+				this._packetService.Start(_cts.Token);
+				return true;
+			}
+			return false;
 		}
 
 		internal void Stop()
 		{
-			_sessionManager.DeactivationSession();	
+			_sessionManager.DeactivationSession();
 		}
 	}
 }

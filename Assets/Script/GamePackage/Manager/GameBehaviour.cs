@@ -1,5 +1,6 @@
 
 
+using NETSIM_Ver2.Assets.Script.Component;
 using NETSIM_Ver2.Assets.Script.GamePackage.Manager;
 using NETSIM_Ver2.Assets.Script.GamePackage.MetaData.Enum;
 using NETSIM_Ver2.Assets.Script.GamePackage.Object;
@@ -15,6 +16,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 namespace NETSIM_Ver2.Assets.Script.GamePackage.Manager
 {
@@ -29,8 +31,12 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Manager
 		[SerializeField]
 		public List<GameObject> LivePlayers = new List<GameObject>();
 
+		private Dictionary<Player, GameObject> _playerMapper = new();
 
 		private GameModule _gameModule;
+		private GamePacketPipe _gamePacketPipe;
+
+
 
 		private Queue<Vector3> _tickDelayOfNextTransform = new();
 
@@ -46,12 +52,16 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Manager
 			// FixedUpdate 를 1초 / 64틱 으로 제어함 
 			// 0.015625
 			Time.fixedDeltaTime = (float)_targetTickMS;
+
 		}
 
 		internal void Init(GamePacketPipe gamePacketPipe, CancellationTokenSource CTS)
 		{
+			this._gamePacketPipe = gamePacketPipe;
 			this._gameModule = new GameModule(gamePacketPipe, CTS);
+			LinkWire();
 		}
+			
 
 		private void FixedUpdate()
 		{
@@ -63,14 +73,40 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Manager
 
 		}
 
-		private void PlayerSpawn()
+		private void LinkWire()
 		{
-			var obj = Instantiate(PlayerPrefab);
-			var objComp = obj.GetComponent<Player>();
-			objComp.Init(new ClientInfo() , new StatusInfo());
-
-			this.LivePlayers.Add(obj);
+			_gameModule.OnCreatePlayer += (player) => PlayerObjectSpawn(player);
+			_gameModule.OnDeletePlayer += (player) => PlayerObjectDelete(player);
 		}
+		private void PlayerObjectSpawn(Player playerData)
+		{
+			GameObject Object = Instantiate(PlayerPrefab);
+			PlayerObject PlayerObject = Object.GetComponent<PlayerObject>();
+			Player PlayerData = PlayerObject.PlayerData;
+			
+			PlayerObject.GetComponent<MeshRenderer>().material = PlayerColor[(int)PlayerData.StatusInfo.PlayerColor];
+			PlayerData.Init(playerData.ClientInfo, playerData.StatusInfo, playerData.TransformInfo);
+
+			if(playerData.ClientInfo.IsPlayable)
+				PlayerObject.Init((float) _targetTickMS, PlayerData , new LocalInputController(_gamePacketPipe));
+			if(!playerData.ClientInfo.IsPlayable)
+				PlayerObject.Init((float) _targetTickMS, PlayerData , new RemotePacketController());
+			
+			this.LivePlayers.Add(Object);
+			this._playerMapper.Add(PlayerData , Object);
+		}
+		private void PlayerObjectDelete(Player playerData)
+		{
+			if(_playerMapper.TryGetValue(playerData , out GameObject playerObject))
+			{
+				this.LivePlayers.Remove(playerObject);
+				this._playerMapper.Remove(playerData);
+			}
+
+		}
+
+
+
 
 		internal void CallStart()
 		{

@@ -25,21 +25,24 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Object
 		{
 			this.ClientInfo = new ClientInfo();
 			this.StatusInfo = new StatusInfo();
+			this.TransformInfo = new TransformInfo();
 		}
 
-		internal void Init(ClientInfo clientInfoInit , StatusInfo statusInfoInit)
+		internal void Init(ClientInfo clientInfoInit , StatusInfo statusInfoInit , TransformInfo transformInfo)
 		{
 			this.ClientInfo = clientInfoInit;	
 			this.StatusInfo = statusInfoInit;
+			this.TransformInfo = transformInfo;
 		}
 
 		internal void Clear()
 		{
 			this.ClientInfo = new ClientInfo();
 			this.StatusInfo = new StatusInfo();
+			this.TransformInfo = new TransformInfo();
 		}
 		
-		internal void MoveTick(EMoveDirFlag moveflag)
+		internal void UpdateMoveFlag(EMoveDirFlag moveflag)
 		{
 			this.StatusInfo.MoveFlag = moveflag;
 			OnMoveTick.Invoke();

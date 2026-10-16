@@ -35,12 +35,15 @@ namespace NETSIM_Ver2.Assets.Script.Component
 			else if (v < 0) currentFlag |= EMoveDirFlag.Down;
 
 
+			player.PlayerData.UpdateMoveFlag(currentFlag);
+			//player.PlayerData.StatusInfo.MoveFlag = currentFlag;
+
 			_gamePacketPipe.OutBoundPipe.TryWrite(new ResultPacketContext
 			{
 				Packet = new C2S_MovePacket(player.PlayerData.ClientInfo.PlayerID, currentFlag)
 			});
 
-			player.Move();
+			//player.Move();
 
 		}
 	}
@@ -55,7 +58,7 @@ namespace NETSIM_Ver2.Assets.Script.Component
 
 		public void OnUpdate(PlayerObject player)
 		{
-			player.Move();
+			//player.Move();
 		}
 
 	}

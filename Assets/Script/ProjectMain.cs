@@ -29,8 +29,14 @@ namespace NETSIM_Ver2.Assets.Script
 
 		private void Start()
 		{
-			this._networkModule.Start();
-			this.GameBehaviour.CallStart();
+			if(this._networkModule.Start())
+			{
+				this.GameBehaviour.CallStart();
+			}
+			else
+			{
+				UnityEngine.Debug.Log("Connected Failed");
+			}
 		}
 
 		private void OnApplicationQuit()

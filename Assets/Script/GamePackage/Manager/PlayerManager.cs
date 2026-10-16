@@ -1,4 +1,5 @@
 
+using NETSIM_Ver2.Assets.Script.Configration;
 using NETSIM_Ver2.Assets.Script.GamePackage;
 using NETSIM_Ver2.Assets.Script.GamePackage.Object;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Context;
@@ -18,16 +19,19 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Manager
 		internal int PoolCount = 0;
 		internal int RegistryCount = 0;
 
+		private Action<Player> _playerObjectCreateTrigger;
+		private Action<Player> _playerObjectDeleteTrigger;
 
-		
 
-		internal PlayerManager()
+		internal PlayerManager(Action<Player> playerObjectCreateTrigger , Action<Player> playerObjectDeleteTrigger )
 		{
 			for (int i = 7; i > -1; i--)
 			{
 				_waitPool.Push(new Player());
 				Interlocked.Increment(ref PoolCount);
 			}
+			this._playerObjectCreateTrigger += playerObjectCreateTrigger;
+			this._playerObjectDeleteTrigger += playerObjectDeleteTrigger;
 		}
 		#region Function
 		internal bool TryGetPlayer(int playerID, out Player player)
@@ -52,9 +56,9 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Manager
 		}
 		#endregion
 
+		private PlayerStartPositionList _playerStartPositionList = new();
 
-
-		internal bool CreatePlayer(int issuancePlayerID, out Player player)
+		internal bool CreatePlayer(int issuancePlayerID)
 		{
 			try
 			{
@@ -64,28 +68,31 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Manager
 					if (_registry.TryAdd(issuancePlayerID, item))
 					{
 						Interlocked.Increment(ref RegistryCount);
-
-						//bool isPlayable = true;
-
-						//item.Init(
-						//	new ClientInfo(issuancePlayerID, isPlayable),
-						//	new StatusInfo());
-						player = item;
 						
 						return true;
 					}
 				}
-				player = null;
 				return false;
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"[Error] : {ex}");
-				player = null;
-				//issuancePlayerID = -1;
+				UnityEngine.Debug.Log($"[CreatePlayer Error] : {ex}");
 				return false;
 			}
 		}
+
+		internal void InitPlayer(int playerID, ClientInfo clientInfo, StatusInfo statusInfo, TransformInfo transformInfo)
+		{
+			if (_registry.TryGetValue(playerID, out Player player))
+			{
+				player.Init(clientInfo, statusInfo, transformInfo);
+				UnityEngine.Debug.Log($"CreatePlayerData");
+				this._playerObjectCreateTrigger.Invoke(player);
+			}
+
+		}
+
+
 		internal bool DeletePlayer(int playerID)
 		{
 			try
@@ -96,6 +103,8 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Manager
 
 					_waitPool.Push(item);
 					Interlocked.Increment(ref PoolCount);
+
+					this._playerObjectDeleteTrigger.Invoke(item);
 					return true;
 				}
 				return false;

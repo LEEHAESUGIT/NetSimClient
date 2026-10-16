@@ -11,6 +11,7 @@ using NETSIM_Ver2.Assets.Script.NetworkPackage.Manager;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Pipe;
 using System;
+using UnityEngine;
 
 namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Router.Handle
 {
@@ -18,12 +19,12 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Router.Handle
 	{
 		// Manager
 		private PlayerManager _playerManager;
-		
+
 		// Pipe
 		private GamePacketPipe _gamePacketPipe;
 
 		// Delegate
-		internal Action<Player> OnCreatePlayerObject;
+		//internal Action<Player> OnCreatePlayerObject;
 
 		internal GameHandle(PlayerManager playerManager, GamePacketPipe gamePacketPipe)
 		{
@@ -31,37 +32,60 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Router.Handle
 			this._gamePacketPipe = gamePacketPipe;
 		}
 
-		internal void SpawnResponseHandle(ReceivePacketContext context)
+		internal void PlayableObjectSpawnResponseHandle(ReceivePacketContext context)
 		{
-			if (context.Packet is S2C_SpawnResponse Packet)
+			if (context.Packet is S2C_AnsPlayableObjectSpawnResponse Packet)
 			{
-				if (_playerManager.CreatePlayer(Packet.ResponsePlayerID, out Player createPlayer))
+				if (_playerManager.CreatePlayer(Packet.ResponsePlayerID))
 				{
-					createPlayer.Init(
+					_playerManager.InitPlayer(
+						Packet.ResponsePlayerID,
 						new ClientInfo(Packet.ResponsePlayerID, true),
-						new StatusInfo(5f, (EPlayerColor)Packet.TargetColorEnum , EMoveDirFlag.None)
+						new StatusInfo(5f, (EPlayerColor)Packet.TargetColorEnum, EMoveDirFlag.None),
+						new TransformInfo(new Vector3(0, 0, 0), new Vector3(0, 0, 0))
 						);
 
 					UnityEngine.Debug.Log($"{Packet.ResponsePlayerID}");
-					UnityEngine.Debug.Log($"SpawnPlayer");
+					UnityEngine.Debug.Log($"PlayerSpawn : Playable, PlayerID : {Packet.ResponsePlayerID} ");
 				}
+			}
+		}
+		internal void NonPlayableObjectSpawnResponseHandle(ReceivePacketContext context)
+		{
+			if (context.Packet is S2C_AnsNonPlayableObjectSpawnResponse Packet)
+			{
+				if (_playerManager.CreatePlayer(Packet.ResponsePlayerID))
+				{
+					_playerManager.InitPlayer(
+						Packet.ResponsePlayerID,
+						new ClientInfo(Packet.ResponsePlayerID, false),
+						new StatusInfo(5f, (EPlayerColor)Packet.TargetColorEnum, EMoveDirFlag.None),
+						new TransformInfo(new Vector3(0, 0, 0), new Vector3(0, 0, 0))
+						);
+
+					UnityEngine.Debug.Log($"{Packet.ResponsePlayerID}");
+					UnityEngine.Debug.Log($"PlayerSpawn : NonPlayable, PlayerID : {Packet.ResponsePlayerID}");
+
+				}
+
 			}
 		}
 
 		internal void PlayerMoveHandle(ReceivePacketContext context)
 		{
-			if(context.Packet is S2C_MovePacket Packet)
+			if (context.Packet is S2C_MovePacket Packet)
 			{
-				if(_playerManager.TryGetPlayer(Packet.PlayerID , out Player player))
+				if (_playerManager.TryGetPlayer(Packet.PlayerID, out Player player))
 				{
-					player.MoveTick(Packet.MoveFlag);
+					player.UpdateMoveFlag(Packet.MoveFlag);
+					//player.StatusInfo.MoveFlag = Packet.MoveFlag;
 				}
 			}
 		}
 
 		internal void TransformInterpolationHandle(ReceivePacketContext context)
 		{
-			if(context.Packet is S2C_TransformInterpolationPacket Packet)
+			if (context.Packet is S2C_TransformInterpolationPacket Packet)
 			{
 				// TODO
 			}

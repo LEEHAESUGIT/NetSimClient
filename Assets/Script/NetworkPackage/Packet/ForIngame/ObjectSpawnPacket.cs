@@ -13,7 +13,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 	internal struct C2S_ReqPlayableObjectSpawnRequest : IPacket
 	{
 		// Info
-		public EPacketID packetID => EPacketID.C_Spawn;
+		public EPacketID packetID => EPacketID.C_PlayableObjectSpawn;
 		//public int TargetSessionID { get; private set; }
 		public C2S_ReqPlayableObjectSpawnRequest(int sessionID)
 		{
@@ -36,7 +36,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 	internal struct S2C_AnsPlayableObjectSpawnResponse : IPacket
 	{
 		// Info
-		public EPacketID packetID => EPacketID.S_Spawn;
+		public EPacketID packetID => EPacketID.S_PlayableObjectSpawn;
 
 		public int TargetSessionID { get; private set; }
 		public int ResponsePlayerID { get; private set; }
@@ -71,7 +71,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 	internal struct C2S_ReqNonPlayableObjectSpawnRequest : IPacket
 	{
 		// Info
-		public EPacketID packetID => EPacketID.C_Spawn;
+		public EPacketID packetID => EPacketID.C_NonPlayableObjectSpawn;
 		//public int TargetSessionID { get; private set; }
 		public C2S_ReqNonPlayableObjectSpawnRequest(int sessionID)
 		{
@@ -94,7 +94,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 	internal struct S2C_AnsNonPlayableObjectSpawnResponse : IPacket
 	{
 		// Info
-		public EPacketID packetID => EPacketID.S_Spawn;
+		public EPacketID packetID => EPacketID.S_NonPlayableObjectSpawn;
 
 		public int TargetSessionID { get; private set; }
 		public int ResponsePlayerID { get; private set; }
