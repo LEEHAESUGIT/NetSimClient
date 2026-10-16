@@ -25,6 +25,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Service
 		{
 			// Manager
 			this._sessionManager = sessionManager;
+			
 			// Pipe
 			this._modulePipe = modulePipe;
 
@@ -38,8 +39,5 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Service
 			this._packetSender.Start(shutDownToken);
 			this._systemPacketProcess.Start(shutDownToken);
 		}
-
-
 	}
-
 }

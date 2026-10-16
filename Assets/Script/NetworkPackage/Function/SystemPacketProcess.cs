@@ -27,8 +27,6 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Function
 		private SystemPacketRouter _systemPacketRouter;
 		private SystemPacketRouterInit _systemPacketRouterInit;
 
-
-		
 		internal SystemPacketProcess(SessionManager sessionManager, ModulePipe modulePipe)
 		{
 			// Manager
@@ -41,18 +39,12 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Function
 			this._systemHandle = new SystemHandle(_sessionManager, _modulePipe.SystemPacketPipe);
 			this._systemPacketRouterInit = new SystemPacketRouterInit(_systemHandle);
 			this._systemPacketRouter = new SystemPacketRouter(_systemPacketRouterInit.InitSystemPacketRouter());
-
-
-			
 		}
-
 
 		internal void Start(CancellationToken shutDownToken)
 		{
 			_ = SystemProcessLoopAsync(shutDownToken);
 		}
-
-
 
 		private async Task SystemProcessLoopAsync(CancellationToken shutDownToken)
 		{
@@ -71,9 +63,5 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Function
 			}
 			catch (Exception ex) { Console.WriteLine($"[Error] : {ex}"); }
 		}
-
-
-
-
 	}
 }

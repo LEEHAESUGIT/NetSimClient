@@ -25,20 +25,12 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Manager
 		public List<Material> PlayerColor;
 
 
-
-
 		public GameObject GameManager;
 		[SerializeField]
 		public List<GameObject> LivePlayers = new List<GameObject>();
 
 
-		//
-		//private GameManager _gameManager;
-
-
 		private GameModule _gameModule;
-
-
 
 		private Queue<Vector3> _tickDelayOfNextTransform = new();
 
@@ -49,46 +41,27 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Manager
 
 		private void Awake()
 		{
-			//if(GameManager != null)
-			//this._gameManager = GameManager.GetComponent<GameManager>();
-
 			this._targetTickMS = _oneSec / _tickRate;
-
 
 			// FixedUpdate 를 1초 / 64틱 으로 제어함 
 			// 0.015625
 			Time.fixedDeltaTime = (float)_targetTickMS;
-
 		}
 
-
-		//private void Start()
-		//{
-
-		//}
 		internal void Init(GamePacketPipe gamePacketPipe, CancellationTokenSource CTS)
 		{
-			//if (this._gameManager == null && GameManager != null)
-			//{
-			//	this._gameManager = GameManager.GetComponent<GameManager>();
-			//}
 			this._gameModule = new GameModule(gamePacketPipe, CTS);
 		}
-
-
 
 		private void FixedUpdate()
 		{
 			_gameModule.OnTick(Time.fixedDeltaTime);
-
 		}
 
 		private void Update()
 		{
 
 		}
-
-
 
 		private void PlayerSpawn()
 		{
@@ -98,10 +71,6 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Manager
 
 			this.LivePlayers.Add(obj);
 		}
-
-
-
-
 
 		internal void CallStart()
 		{

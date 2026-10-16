@@ -77,7 +77,10 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Function
 					session.InputPacketData(packetData);
 				});
 			}
-			catch (Exception ex) { }
+			catch (Exception ex) 
+			{ 
+				UnityEngine.Debug.LogException(ex);
+			}
 		}
 
 

@@ -18,23 +18,17 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Router.Handle
 	{
 		// Manager
 		private PlayerManager _playerManager;
-		private GameManager _gameManager;
-
-
-
+		
 		// Pipe
 		private GamePacketPipe _gamePacketPipe;
 
 		// Delegate
 		internal Action<Player> OnCreatePlayerObject;
 
-
-		internal GameHandle(GameManager gameManager, PlayerManager playerManager, GamePacketPipe gamePacketPipe)
+		internal GameHandle(PlayerManager playerManager, GamePacketPipe gamePacketPipe)
 		{
 			this._playerManager = playerManager;
 			this._gamePacketPipe = gamePacketPipe;
-			
-			this._gameManager = gameManager;
 		}
 
 		internal void SpawnResponseHandle(ReceivePacketContext context)
@@ -45,14 +39,11 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Router.Handle
 				{
 					createPlayer.Init(
 						new ClientInfo(Packet.ResponsePlayerID, true),
-						new StatusInfo(5f, (EPlayerColor)Packet.TargetColorEnum)
+						new StatusInfo(5f, (EPlayerColor)Packet.TargetColorEnum , EMoveDirFlag.None)
 						);
 
 					UnityEngine.Debug.Log($"{Packet.ResponsePlayerID}");
 					UnityEngine.Debug.Log($"SpawnPlayer");
-					
-
-					_gameManager.SpawnPlayer(Packet.ResponsePlayerID);
 				}
 			}
 		}
@@ -63,15 +54,18 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Router.Handle
 			{
 				if(_playerManager.TryGetPlayer(Packet.PlayerID , out Player player))
 				{
-					player.StatusInfo.OnUpdateMoveFlag(Packet.MoveFlag);
+					player.MoveTick(Packet.MoveFlag);
 				}
 			}
 		}
 
-
-
+		internal void TransformInterpolationHandle(ReceivePacketContext context)
+		{
+			if(context.Packet is S2C_TransformInterpolationPacket Packet)
+			{
+				// TODO
+			}
+		}
 	}
-
-
 }
 

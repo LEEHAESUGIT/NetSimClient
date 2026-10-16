@@ -56,8 +56,6 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Socket
 		}
 		#endregion
 
-
-
 		internal void Init(ModulePipe modulePipe, CancellationToken clientToken)
 		{
 			_disconnectedLock = 0;
@@ -114,11 +112,8 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Socket
 					{
 						Packet = new C2S_InitRequest()
 					});
-
 			}
-
 		}
-
 
 		internal void Disconnect()
 		{
@@ -128,7 +123,6 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Socket
 				Clear();
 			}
 		}
-
 
 		private void Clear()
 		{
@@ -152,29 +146,6 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Socket
 			LastHeartBeatTime = DateTime.MinValue;
 		}
 
-
-
-
-
-
-
-		//internal async Task<bool> Send(ReadOnlyMemory<byte> packetData)
-		//{
-		//	try
-		//	{
-		//		if (this._disconnectedLock == 1)
-		//			return false;
-		//		await _stream.WriteAsync(packetData);
-		//		return true;
-		//	}
-		//	catch (Exception ex)
-		//	{
-		//		UnityEngine.Debug.LogException(ex);
-		//		return false;
-		//	}
-		//}
-
-
 		private Channel<ReadOnlyMemory<byte>> _sendPipe = Channel.CreateUnbounded<ReadOnlyMemory<byte>>();
 		internal bool InputPacketData(ReadOnlyMemory<byte> context) => _sendPipe.Writer.TryWrite(context);
 		private void ClearSendPipe()
@@ -189,15 +160,10 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Socket
 				{
 					if (_disconnectedLock == 1) return;
 
-					await _stream.WriteAsync(packetData);
+					await _stream.WriteAsync(packetData,_loopToken);
 				}
 			}
 		}
-
-
-
-
-
 
 		private async Task ReceivedLoopAsync()
 		{
@@ -223,8 +189,9 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Socket
 					PacketProcess();
 				}
 			}
-			catch (OperationCanceledException)
+			catch (OperationCanceledException ex)
 			{
+				UnityEngine.Debug.LogException(ex);
 				//NetManager.instance.Log($"정상적인 해제 {this.SessionID}");
 			}
 			catch (Exception ex)
@@ -262,6 +229,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Socket
 				}
 				else
 				{
+					UnityEngine.Debug.Log($"Failed Parse");
 					Disconnect();
 					return;
 				}

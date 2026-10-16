@@ -1,7 +1,3 @@
-
-
-
-
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Manager;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Pipe;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Service;
@@ -21,11 +17,9 @@ namespace NETSIM_Ver2.Assets.Script.Module
 		// Pipe
 		private ModulePipe _moudlePipe;
 
-
 		// Service
 		private SessionLifeCycleService _sessionLifeCycleService;
 		private PacketService _packetService;
-
 
 		internal NetworkModule(ModulePipe modulePipe , CancellationTokenSource clientCTS)
 		{
@@ -43,22 +37,16 @@ namespace NETSIM_Ver2.Assets.Script.Module
 			this._packetService = new PacketService(_sessionManager , _moudlePipe);
 		}
 
-		internal void Strart()
+		internal void Start()
 		{
 			this._sessionLifeCycleService.Start(9999,_cts.Token);
 			this._packetService.Start(_cts.Token);
-
-
 		}
+
 		internal void Stop()
 		{
-			_sessionManager.DeactivationSession();
-			
+			_sessionManager.DeactivationSession();	
 		}
-
-
-
-
 	}
 }
 

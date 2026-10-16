@@ -545,61 +545,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &874107776
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 874107778}
-  - component: {fileID: 874107779}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &874107778
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 874107776}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &874107779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 874107776}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a30c948bd23e1ae47a70b1e4a876e26a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NETSIM_Ver2.Assets.Script.NetworkPackage.Manager.GameManager
-  PlayerPrefab: {fileID: 761248964578884412, guid: e07dcff7fbe5acd4eacd28066c23ee00, type: 3}
-  PlayerColor:
-  - {fileID: 2100000, guid: 41af1843a84596740a7a95951efbf0a3, type: 2}
-  - {fileID: 2100000, guid: c9f8232efab95cc4fbdbbfe197635825, type: 2}
-  - {fileID: 2100000, guid: 3615dfc5a44539440985ac35a818744c, type: 2}
-  - {fileID: 2100000, guid: 00d35f8f485d15f48940d8b53df0b9a8, type: 2}
-  - {fileID: 2100000, guid: 3375082054077d347bcc0d746c1246f7, type: 2}
-  - {fileID: 2100000, guid: 9fbdfd32db9481141a17ac5431c5eb6a, type: 2}
-  - {fileID: 2100000, guid: d4e104b526874144eada4bfe399f91b2, type: 2}
-  - {fileID: 2100000, guid: cb1c983c66ae75c44992c6eac38a3c6a, type: 2}
-  - {fileID: 2100000, guid: e98519fac675f334ca8fcec53ade9eff, type: 2}
 --- !u!1 &1277628654
 GameObject:
   m_ObjectHideFlags: 0
@@ -630,7 +575,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NETSIM_Ver2.Assets.Script.Bridge.GameToNetworkBridge
   GameBehaviour: {fileID: 1825352251}
-  NetworkBehaviour: {fileID: 1901709122}
 --- !u!4 &1277628656
 Transform:
   m_ObjectHideFlags: 0
@@ -675,7 +619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7adcd65cd1f0f9142a260226250d2fd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NETSIM_Ver2.Assets.Script.GamePackage.Manager.GameBehaviour
-  PlayerPrefab: {fileID: 0}
+  PlayerPrefab: {fileID: 761248964578884412, guid: e07dcff7fbe5acd4eacd28066c23ee00, type: 3}
   PlayerColor:
   - {fileID: 2100000, guid: 41af1843a84596740a7a95951efbf0a3, type: 2}
   - {fileID: 2100000, guid: c9f8232efab95cc4fbdbbfe197635825, type: 2}
@@ -686,7 +630,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: d4e104b526874144eada4bfe399f91b2, type: 2}
   - {fileID: 2100000, guid: cb1c983c66ae75c44992c6eac38a3c6a, type: 2}
   - {fileID: 2100000, guid: e98519fac675f334ca8fcec53ade9eff, type: 2}
-  GameManager: {fileID: 874107776}
+  GameManager: {fileID: 0}
   LivePlayers: []
 --- !u!4 &1825352252
 Transform:
@@ -703,50 +647,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1901709121
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1901709123}
-  - component: {fileID: 1901709122}
-  m_Layer: 0
-  m_Name: NetworkBehaviour
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1901709122
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1901709121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc0f0718b9c27df45ae6144d94443407, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NETSIM_Ver2.Assets.Script.NetworkPackage.Manager.NetworkBehaviour
---- !u!4 &1901709123
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1901709121}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: -0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -755,7 +655,5 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 862323172}
-  - {fileID: 874107778}
   - {fileID: 1277628656}
   - {fileID: 1825352252}
-  - {fileID: 1901709123}

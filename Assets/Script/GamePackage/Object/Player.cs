@@ -2,15 +2,24 @@
 
 
 
+using NETSIM_Ver2.Assets.Script.GamePackage.MetaData.Enum;
+using System;
 using UnityEngine;
 
 namespace NETSIM_Ver2.Assets.Script.GamePackage.Object
 {
-	[System.Serializable]
-	internal class Player
+	[Serializable]
+	public class Player
 	{
-		internal ClientInfo ClientInfo { get; set; }
-		internal StatusInfo StatusInfo { get; set; }
+		[SerializeField]
+		internal ClientInfo ClientInfo;
+		[SerializeField]
+		internal StatusInfo StatusInfo;
+		[SerializeField]
+		internal TransformInfo TransformInfo;
+
+
+		internal Action OnMoveTick;
 
 		internal Player()
 		{
@@ -29,6 +38,14 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Object
 			this.ClientInfo = new ClientInfo();
 			this.StatusInfo = new StatusInfo();
 		}
+		
+		internal void MoveTick(EMoveDirFlag moveflag)
+		{
+			this.StatusInfo.MoveFlag = moveflag;
+			OnMoveTick.Invoke();
+
+		}
+
 
 
 	}

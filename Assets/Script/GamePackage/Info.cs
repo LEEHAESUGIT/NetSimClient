@@ -1,42 +1,54 @@
 
 using NETSIM_Ver2.Assets.Script.GamePackage.MetaData.Enum;
+using System;
+using UnityEngine;
+using UnityEngine.InputSystem.Composites;
 
 namespace NETSIM_Ver2.Assets.Script.GamePackage
 {
-	[System.Serializable]
-	internal class StatusInfo
+	[Serializable]
+	public struct StatusInfo
 	{
-		internal float MoveSpeed { get; private set; } = 5f;
-		internal EPlayerColor PlayerColor { get; private set; } = EPlayerColor.NONE;
-		internal MoveFlagWraper MoveFlagWraper { get; private set; }
+		public float MoveSpeed;
+		[SerializeField] internal EPlayerColor PlayerColor;
+		[SerializeField] internal EMoveDirFlag MoveFlag;
 
-		internal StatusInfo() { }
-		internal StatusInfo(float moveSpeed, EPlayerColor playerColor)
+		internal StatusInfo(float moveSpeed, EPlayerColor playerColor , EMoveDirFlag moveFlag)
 		{
 			this.MoveSpeed = moveSpeed;
 			this.PlayerColor = playerColor;
-			this.MoveFlagWraper = new();
+			this.MoveFlag = moveFlag;
 		}
-
-		internal void OnUpdateMoveFlag(EMoveDirFlag moveFlag)
-		{
-			this.MoveFlagWraper.Input(moveFlag);
-		}
-
 	}
-	[System.Serializable]
-	internal class ClientInfo
-	{
-		internal int PlayerID { get; set; } = -1;
-		internal bool IsPlayable { get; set; } = false;
 
-		internal ClientInfo() { }
+	[Serializable]
+	public struct ClientInfo
+	{
+		public int PlayerID;
+		public bool IsPlayable;
 		internal ClientInfo(int playerID, bool isPlayable)
 		{
 			this.PlayerID = playerID;
 			this.IsPlayable = isPlayable;
 		}
-
-
 	}
+
+	[Serializable]
+	public struct TransformInfo
+	{
+		public Vector3 NowPosition;
+		public Vector3 NowDirection;
+
+		public Vector3 NextPosition;
+		public Vector3 NextDirection;
+		
+		internal TransformInfo(Vector3 nowPos , Vector3 nowDir) 
+		{
+			this.NowPosition = nowPos;
+			this.NowDirection = nowDir;
+			this.NextPosition = nowPos;
+			this.NextDirection = nowDir;
+		}
+	}
+
 }

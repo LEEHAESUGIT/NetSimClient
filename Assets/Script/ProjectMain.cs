@@ -29,7 +29,7 @@ namespace NETSIM_Ver2.Assets.Script
 
 		private void Start()
 		{
-			this._networkModule.Strart();
+			this._networkModule.Start();
 			this.GameBehaviour.CallStart();
 		}
 

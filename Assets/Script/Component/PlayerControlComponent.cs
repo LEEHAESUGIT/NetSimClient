@@ -25,78 +25,37 @@ namespace NETSIM_Ver2.Assets.Script.Component
 		public void OnUpdate(PlayerObject player)
 		{
 
-			float h = Input.GetAxis("Horizontal");
-			float v = Input.GetAxis("Vertical");
+			float h = Input.GetAxisRaw("Horizontal");
+			float v = Input.GetAxisRaw("Vertical");
 
 			EMoveDirFlag currentFlag = EMoveDirFlag.None;
-			if (h > 0)
-			{
-				currentFlag |= EMoveDirFlag.Right;
-			}
-			else if (h < 0)
-			{
-				currentFlag |= EMoveDirFlag.Left;
-			}
+			if (h > 0) currentFlag |= EMoveDirFlag.Right;
+			else if (h < 0) currentFlag |= EMoveDirFlag.Left;
+			if (v > 0) currentFlag |= EMoveDirFlag.Up;
+			else if (v < 0) currentFlag |= EMoveDirFlag.Down;
 
-			// 세로 방향 플래그 설정 (동시 입력 시 대각선 이동 지원)
-			if (v > 0)
-			{
-				currentFlag |= EMoveDirFlag.Up;
-			}
-			else if (v < 0)
-			{
-				currentFlag |= EMoveDirFlag.Down;
-			}
 
 			_gamePacketPipe.OutBoundPipe.TryWrite(new ResultPacketContext
 			{
-				Packet = new C2S_MovePacket(player.PlayerData.ClientInfo.PlayerID , currentFlag)
+				Packet = new C2S_MovePacket(player.PlayerData.ClientInfo.PlayerID, currentFlag)
 			});
 
-			Vector3 moveDir = FlagToVector(currentFlag);
-			player.Move(moveDir);
+			player.Move();
 
 		}
-
-		public Vector3 FlagToVector(EMoveDirFlag flag)
-		{
-			float x = 0f;
-			float z = 0f;
-
-			if ((flag & EMoveDirFlag.Right) != 0) x += 1f;
-			if ((flag & EMoveDirFlag.Left) != 0) x -= 1f;
-			if ((flag & EMoveDirFlag.Up) != 0) z += 1f;
-			if ((flag & EMoveDirFlag.Down) != 0) z -= 1f;
-
-			Vector3 dir = new Vector3(x, 0f, z);
-			return dir.sqrMagnitude > 0f ? dir.normalized : Vector3.zero;
-		}
-
 	}
 
 
 	internal class RemotePacketController : IPlayerController
 	{
-		private MoveFlagWraper _moveFlagWraper;
 
-
-		internal RemotePacketController(MoveFlagWraper moveFlagWraper)
+		internal RemotePacketController()
 		{
-			this._moveFlagWraper = moveFlagWraper;
 		}
 
 		public void OnUpdate(PlayerObject player)
 		{
-			if (_moveFlagWraper.Output() == EMoveDirFlag.None)
-				player.InterlockedMove(Vector3.zero);
-			if (_moveFlagWraper.Output() == EMoveDirFlag.Up)
-				player.InterlockedMove(Vector3.up);
-			if (_moveFlagWraper.Output() == EMoveDirFlag.Down)
-				player.InterlockedMove(Vector3.down);
-			if (_moveFlagWraper.Output() == EMoveDirFlag.Left)
-				player.InterlockedMove(Vector3.up);
-			if (_moveFlagWraper.Output() == EMoveDirFlag.Right)
-				player.InterlockedMove(Vector3.right);
+			player.Move();
 		}
 
 	}
