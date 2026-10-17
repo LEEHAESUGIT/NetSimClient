@@ -15,6 +15,7 @@ using NETSIM_Ver2.Assets.Script.NetworkPackage.Router.Init;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -65,13 +66,20 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Manager
 
 		private void FixedUpdate()
 		{
-			_gameModule.OnTick(Time.fixedDeltaTime);
+			OnTick(Time.fixedDeltaTime);
 		}
 
 		private void Update()
 		{
 
 		}
+
+		internal void OnTick(float targetTickMs)
+		{
+			_gameModule.PacketProcess();
+			NextMoveLogic();
+		}
+
 
 		private void LinkWire()
 		{
@@ -82,18 +90,18 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Manager
 		{
 			GameObject Object = Instantiate(PlayerPrefab);
 			PlayerObject PlayerObject = Object.GetComponent<PlayerObject>();
-			Player PlayerData = PlayerObject.PlayerData;
+			//Player PlayerData = PlayerObject.PlayerData;
 			
-			PlayerObject.GetComponent<MeshRenderer>().material = PlayerColor[(int)PlayerData.StatusInfo.PlayerColor];
-			PlayerData.Init(playerData.ClientInfo, playerData.StatusInfo, playerData.TransformInfo);
+			PlayerObject.GetComponent<MeshRenderer>().material = PlayerColor[(int)playerData.StatusInfo.PlayerColor];
+			//PlayerData.Init(playerData.ClientInfo, playerData.StatusInfo, playerData.TransformInfo);
 
 			if(playerData.ClientInfo.IsPlayable)
-				PlayerObject.Init((float) _targetTickMS, PlayerData , new LocalInputController(_gamePacketPipe));
+				PlayerObject.Init((float) _targetTickMS, playerData, new LocalInputController(_gamePacketPipe));
 			if(!playerData.ClientInfo.IsPlayable)
-				PlayerObject.Init((float) _targetTickMS, PlayerData , new RemotePacketController());
+				PlayerObject.Init((float) _targetTickMS, playerData, new RemotePacketController());
 			
 			this.LivePlayers.Add(Object);
-			this._playerMapper.Add(PlayerData , Object);
+			this._playerMapper.Add(playerData, Object);
 		}
 		private void PlayerObjectDelete(Player playerData)
 		{
@@ -105,8 +113,15 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Manager
 
 		}
 
+		private void NextMoveLogic()
+		{
+			foreach (var player in LivePlayers)
+			{
+				player.GetComponent<PlayerObject>().OnUpdateMoveTick();
+			}
+		}
 
-
+		
 
 		internal void CallStart()
 		{

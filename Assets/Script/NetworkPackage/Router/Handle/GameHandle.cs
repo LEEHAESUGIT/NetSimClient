@@ -32,6 +32,39 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Router.Handle
 			this._gamePacketPipe = gamePacketPipe;
 		}
 
+		internal void AllPlayerSpawnHandle(ReceivePacketContext context)
+		{
+			if (context.Packet is S2C_LivePlayerRenewalPacket Packet)
+			{
+				for (int i = 0; i < Packet.LivePlayerCount; i++)
+				{
+					if (_playerManager.CreatePlayer(Packet.Snapshots[i].PlayerID))
+					{
+						_playerManager.InitPlayer(
+							Packet.Snapshots[i].PlayerID,
+							new ClientInfo(Packet.Snapshots[i].PlayerID, false),
+							new StatusInfo(5f, (EPlayerColor)Packet.InfoWrapper[i].PlayerColor, EMoveDirFlag.None),
+							new TransformInfo(
+								new Vector3(
+									Packet.Snapshots[i].PosX,
+									Packet.Snapshots[i].PosY,
+									Packet.Snapshots[i].PosZ),
+								new Vector3(
+									Packet.Snapshots[i].DirX,
+									Packet.Snapshots[i].DirY,
+									Packet.Snapshots[i].DirZ
+									))
+							);
+
+						UnityEngine.Debug.Log($"{Packet.Snapshots[i].PlayerID}");
+						UnityEngine.Debug.Log($"PlayerSpawn : NonPlayable, PlayerID : {Packet.Snapshots[i].PlayerID} ");
+					}
+				}
+
+
+			}
+		}
+
 		internal void PlayableObjectSpawnResponseHandle(ReceivePacketContext context)
 		{
 			if (context.Packet is S2C_AnsPlayableObjectSpawnResponse Packet)
@@ -77,8 +110,8 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Router.Handle
 			{
 				if (_playerManager.TryGetPlayer(Packet.PlayerID, out Player player))
 				{
+					UnityEngine.Debug.Log($"MovePacket Target:{ Packet.PlayerID}");
 					player.UpdateMoveFlag(Packet.MoveFlag);
-					//player.StatusInfo.MoveFlag = Packet.MoveFlag;
 				}
 			}
 		}

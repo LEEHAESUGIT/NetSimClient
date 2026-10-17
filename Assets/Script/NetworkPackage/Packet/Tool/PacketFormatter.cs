@@ -75,6 +75,9 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.Tool
 			// 추후 Action<Session, PacketReader> 기반의 In-place 파싱 및 핸들러 직접 호출 구조로 전환하여 제로 알로케이션 달성할 것.
 			tempInitParseMap.Add(EPacketID.S_PlayableObjectSpawn, (_packetReader) => S2C_AnsPlayableObjectSpawnResponse.Deserialize(_packetReader));
 			tempInitParseMap.Add(EPacketID.S_NonPlayableObjectSpawn, (_packetReader) => S2C_AnsNonPlayableObjectSpawnResponse.Deserialize(_packetReader));
+
+			tempInitParseMap.Add(EPacketID.S_LivePlayerRenewal, (_packetReader) => S2C_LivePlayerRenewalPacket.Deserialize(_packetReader));
+
 			tempInitParseMap.Add(EPacketID.S_Move, (_packetReader) => S2C_MovePacket.Deserialize(_packetReader));
 			tempInitParseMap.Add(EPacketID.S_Transform, (_packetReader) => S2C_TransformInterpolationPacket.Deserialize(_packetReader));
 

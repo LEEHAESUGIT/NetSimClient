@@ -64,13 +64,9 @@ namespace NETSIM_Ver2.Assets.Script.Module
 			});
 		}
 
-		internal void OnTick(float targetTickMs)
-		{
-			PacketProcess();
+		
 
-		}
-
-		private void PacketProcess()
+		internal void PacketProcess()
 		{
 			int maxProcessCount = 500;
 			int currentCount = 0;
@@ -81,6 +77,7 @@ namespace NETSIM_Ver2.Assets.Script.Module
 				currentCount++;
 			}
 		}
+		
 
 	}
 }

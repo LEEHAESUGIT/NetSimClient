@@ -16,6 +16,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.MetaData.Enum
 		// 1 ~ 100
 		S_PlayableObjectSpawn = 1,
 		S_NonPlayableObjectSpawn = 2,
+		S_LivePlayerRenewal = 3,
 		S_Move = 5,
 
 		S_Transform = 11,

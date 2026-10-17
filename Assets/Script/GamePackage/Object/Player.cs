@@ -45,7 +45,7 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Object
 		internal void UpdateMoveFlag(EMoveDirFlag moveflag)
 		{
 			this.StatusInfo.MoveFlag = moveflag;
-			OnMoveTick.Invoke();
+			//OnMoveTick.Invoke();
 
 		}
 

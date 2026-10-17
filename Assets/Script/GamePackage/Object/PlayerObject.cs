@@ -37,6 +37,7 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Object
 		{
 			if (_playerController != null)
 				_playerController.OnUpdate(this);
+			//OnUpdateMoveTick();
 			Move();
 		}
 

@@ -1,6 +1,7 @@
 ﻿using NETSIM_Ver2.Assets.Script.NetworkPackage.MetaData.Enum;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.MetaData.Interface;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.Tool;
+using NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.WrapperForPacket;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,29 +11,6 @@ using System.Threading.Tasks;
 
 namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 {
-
-	internal struct PlayersPositionSnapshot
-	{
-		public int PlayerID { get; private set; }
-		public float PosX { get; private set; }
-		public float PosY { get; private set; }
-		public float PosZ { get; private set; }
-
-		public float DirX { get; private set; }
-		public float DirY { get; private set; }
-		public float DirZ { get; private set; }
-
-		internal PlayersPositionSnapshot(int playerID, float posX, float posY, float posZ, float dirX, float dirY, float dirZ)
-		{
-			this.PlayerID = playerID;
-			this.PosX = posX;
-			this.PosY = posY;
-			this.PosZ = posZ;
-			this.DirX = dirX;
-			this.DirY = dirY;
-			this.DirZ = dirZ;
-		}
-	}
 
 	internal struct S2C_TransformInterpolationPacket : IPacket
 	{
