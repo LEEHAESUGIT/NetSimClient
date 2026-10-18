@@ -2,6 +2,7 @@ using NETSIM_Ver2.Assets.Script.GamePackage.Manager;
 using NETSIM_Ver2.Assets.Script.GamePackage.Object;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Context;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Manager;
+using NETSIM_Ver2.Assets.Script.NetworkPackage.Packet;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Pipe;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Router;
@@ -58,10 +59,7 @@ namespace NETSIM_Ver2.Assets.Script.Module
 
 		internal void Start()
 		{
-			_gamePacketPipe.OutBoundPipe.TryWrite(new ResultPacketContext
-			{
-				Packet = new C2S_ReqPlayableObjectSpawnRequest()
-			});
+			PacketOperator.Instance.GenerateReqPlayableSpawnPacket();
 		}
 
 		

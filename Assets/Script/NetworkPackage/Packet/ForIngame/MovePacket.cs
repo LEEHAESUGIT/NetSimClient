@@ -15,13 +15,15 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 		// Info
 		public EPacketID packetID => EPacketID.C_Move;
 
-		public int PlayerID;
-		public EMoveDirFlag MoveFlag;
+		public uint Tick { get; private set; }
+		public int PlayerID { get; private set; }
+		public EMoveDirFlag MoveFlag { get; private set; }
 
 
 
-		public C2S_MovePacket(int playerID, EMoveDirFlag moveFlag)
+		public C2S_MovePacket(uint tick,int playerID, EMoveDirFlag moveFlag)
 		{
+			this.Tick = tick;
 			this.PlayerID = playerID;
 			this.MoveFlag = moveFlag;
 		}
@@ -29,6 +31,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 
 		public void Serialize(PacketWriter writer)
 		{
+			writer.Write(this.Tick);
 			writer.Write(this.PlayerID);
 			writer.Write((byte)this.MoveFlag);
 		}
@@ -36,6 +39,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 		{
 			return new C2S_MovePacket
 			{
+				Tick = reader.ReadUInt(),
 				PlayerID = reader.ReadInt(),
 				MoveFlag = (EMoveDirFlag)reader.ReadUshort()
 			};
@@ -46,11 +50,13 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 		// Info
 		public EPacketID packetID => EPacketID.S_Move;
 
-		public int PlayerID;
-		public EMoveDirFlag MoveFlag;
+		public uint Tick { get; private set; }
+		public int PlayerID { get; private set; }
+		public EMoveDirFlag MoveFlag { get; private set; }
 
-		public S2C_MovePacket(int playerID, EMoveDirFlag moveFlag)
+		public S2C_MovePacket(uint tick , int playerID, EMoveDirFlag moveFlag)
 		{
+			this.Tick = tick;
 			this.PlayerID = playerID;
 			this.MoveFlag = moveFlag;
 		}
@@ -58,6 +64,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 
 		public void Serialize(PacketWriter writer)
 		{
+			writer.Write(this.Tick);
 			writer.Write(this.PlayerID);
 			writer.Write((byte)this.MoveFlag);
 		}
@@ -65,6 +72,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 		{
 			return new S2C_MovePacket
 			{
+				Tick = reader.ReadUInt(),
 				PlayerID = reader.ReadInt(),
 				MoveFlag = (EMoveDirFlag)reader.ReadUshort()
 			};

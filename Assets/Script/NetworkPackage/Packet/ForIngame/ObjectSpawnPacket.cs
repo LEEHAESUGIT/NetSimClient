@@ -14,22 +14,23 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 	{
 		// Info
 		public EPacketID packetID => EPacketID.C_PlayableObjectSpawn;
-		//public int TargetSessionID { get; private set; }
-		public C2S_ReqPlayableObjectSpawnRequest(int sessionID)
-		{
-			//this.TargetSessionID = sessionID;
-		}
 
+		public uint Tick { get; private set; }
+
+		public C2S_ReqPlayableObjectSpawnRequest(uint tick)
+		{
+			this.Tick = tick;
+		}
 
 		public void Serialize(PacketWriter writer)
 		{
-			//writer.Write(TargetSessionID);
+			writer.Write(Tick);
 		}
 		public static C2S_ReqPlayableObjectSpawnRequest Deserialize(PacketReader reader)
 		{
 			return new C2S_ReqPlayableObjectSpawnRequest
 			{
-				//TargetSessionID = reader.ReadInt()
+				Tick = reader.ReadUInt()
 			};
 		}
 	}
@@ -37,13 +38,14 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 	{
 		// Info
 		public EPacketID packetID => EPacketID.S_PlayableObjectSpawn;
-
+		public uint Tick { get; private set; }
 		public int TargetSessionID { get; private set; }
 		public int ResponsePlayerID { get; private set; }
 		public int TargetColorEnum { get; private set; }
 
-		public S2C_AnsPlayableObjectSpawnResponse(int sessionID, int issuanceID, int colorEnum)
+		public S2C_AnsPlayableObjectSpawnResponse(uint tick, int sessionID, int issuanceID, int colorEnum)
 		{
+			this.Tick = tick;
 			this.TargetSessionID = sessionID;
 			this.ResponsePlayerID = issuanceID;
 			this.TargetColorEnum = colorEnum;
@@ -52,6 +54,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 
 		public void Serialize(PacketWriter writer)
 		{
+			writer.Write(Tick);
 			writer.Write(TargetSessionID);
 			writer.Write(ResponsePlayerID);
 			writer.Write(TargetColorEnum);
@@ -60,6 +63,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 		{
 			return new S2C_AnsPlayableObjectSpawnResponse
 			{
+				Tick = reader.ReadUInt(),
 				TargetSessionID = reader.ReadInt(),
 				ResponsePlayerID = reader.ReadInt(),
 				TargetColorEnum = reader.ReadInt()

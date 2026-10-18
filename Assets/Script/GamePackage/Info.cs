@@ -57,6 +57,13 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage
 	[Serializable]
 	public class InterpolationInfo
 	{
+		/// <summary>
+		/// 보간 틱레이틀를 10 틱으로 기준을 잡는다.													ex) 64틱 기준으로 1틱은 약 0.0156초 정도이므로 156ms가 보간을 처리하는 시간이 된다.
+		/// 현재 타겟이 되는 오브젝트의 현재 포지션과 보간되는 포지션의 위치를 계산하여 오차를 낸다.	ex) CoordinateErrorPos = interpos Vector3 - transform.position 
+		/// 오차를 보간틱 기준으로 나누어 틱당 이동 포지션을 구한다.									ex) OneTickInterpolationPos = CoordinateErrorPos / 10
+		/// 틱당 이동포지션을 매틱마다 오브젝트의 이동에 추가한다.										ex) OneTickMovePos = NextMovePos + OneTickInterpolationPos
+		/// 만약 10틱 안에 보간패킷이 도착한 경우, 최신의 보간패킷을 기준으로 다시 연산한다.
+		/// </summary>
 		// PacketData
 		public Vector3 InterpolationPosition { get; private set; }
 		public Vector3 InterpolationDirection { get; private set; }

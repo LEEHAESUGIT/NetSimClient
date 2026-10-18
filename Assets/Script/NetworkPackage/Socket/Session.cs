@@ -72,6 +72,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Socket
 				try
 				{
 					this._client = new TcpClient();
+					this._client.NoDelay = true;
 					await _client.ConnectAsync(IPAddress.Loopback, port);
 					this._stream = _client.GetStream();
 					break;
@@ -100,18 +101,12 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Socket
 				// TODO 
 				// 패킷 전송 타이밍을 세션내부가 아닌 외부에서 
 
-				long unixTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 				_modulePipe.SystemPacketPipe.OutBoundPipe.TryWrite(
 					new ResultPacketContext
 					{
-						Packet = new C2S_InitRequest()
+						Packet = new C2S_InitRequest(0)
 					});
-				_modulePipe.SystemPacketPipe.OutBoundPipe.TryWrite(
-					new ResultPacketContext
-					{
-						Packet = new C2SHeartBeat(unixTime, 0, 0)
-					});
-
+				
 			}
 		}
 

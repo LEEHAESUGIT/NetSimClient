@@ -15,30 +15,21 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForSystem
 		// Info
 		public EPacketID packetID => EPacketID.C_HeartBeat;
 		// Data
-		public long WasSendTime { get; set; }
-		public long ServerTick { get; set; }
-		public long SessionTick { get; set; }
+		public uint Tick { get; set; }
 
-		public C2SHeartBeat(long sendTime, long serverTick , long sessionTick)
-		{
-			this.WasSendTime = sendTime;
-			this.ServerTick = serverTick;
-			this.SessionTick = sessionTick;
+		public C2SHeartBeat(uint tick)
+		{ 
+			this.Tick = tick;
 		}
 		public void Serialize(PacketWriter writer)
 		{
-			writer.Write(WasSendTime);
-			writer.Write(ServerTick);
-			writer.Write(SessionTick);
-				
+			writer.Write(Tick);	
 		}
 		public static C2SHeartBeat Deserialize(PacketReader reader)
 		{
 			return new C2SHeartBeat
 			{
-				WasSendTime = reader.ReadLong(),
-				ServerTick = reader.ReadLong(),
-				SessionTick = reader.ReadLong()
+				Tick = reader.ReadUInt()
 			};
 		}
 	}
@@ -48,31 +39,23 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForSystem
 		// Info
 		public EPacketID packetID => EPacketID.S_HeartBeat;
 		// Data
-		public long WasSendTime { get; set; }
-		public long ServerTick { get; set; }
-		public long SessionTick { get; set; }
+		public uint Tick { get; set; }
 
 
-		public S2CHeartBeat(long sendTime, long serverTick, long sessionTick)
+		public S2CHeartBeat(uint tick)
 		{
-			this.WasSendTime = sendTime;
-			this.ServerTick = serverTick;
-			this.SessionTick = sessionTick;
+			this.Tick = tick;
 		}
 		public void Serialize(PacketWriter writer)
 		{
-			writer.Write(WasSendTime);
-			writer.Write(ServerTick);
-			writer.Write(SessionTick);
+			writer.Write(Tick);
 
 		}
 		public static S2CHeartBeat Deserialize(PacketReader reader)
 		{
 			return new S2CHeartBeat
 			{
-				WasSendTime = reader.ReadLong(),
-				ServerTick = reader.ReadLong(),
-				SessionTick = reader.ReadLong()
+				Tick = reader.ReadUInt()
 			}; ;
 		}
 	}

@@ -11,6 +11,7 @@ using NETSIM_Ver2.Assets.Script.GamePackage.MetaData.Enum;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Pipe;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Context;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame;
+using NETSIM_Ver2.Assets.Script.NetworkPackage.Packet;
 
 namespace NETSIM_Ver2.Assets.Script.Component
 {
@@ -21,7 +22,7 @@ namespace NETSIM_Ver2.Assets.Script.Component
 		{
 			this._gamePacketPipe = gamePacketPipe;
 		}
-
+		EMoveDirFlag pastFlag = EMoveDirFlag.None;
 		public void OnUpdate(PlayerObject player)
 		{
 
@@ -34,16 +35,13 @@ namespace NETSIM_Ver2.Assets.Script.Component
 			if (v > 0) currentFlag |= EMoveDirFlag.Up;
 			else if (v < 0) currentFlag |= EMoveDirFlag.Down;
 
-
-			player.PlayerData.UpdateMoveFlag(currentFlag);
-			//player.PlayerData.StatusInfo.MoveFlag = currentFlag;
-
-			_gamePacketPipe.OutBoundPipe.TryWrite(new ResultPacketContext
+			if(pastFlag != currentFlag)
 			{
-				Packet = new C2S_MovePacket(player.PlayerData.ClientInfo.PlayerID, currentFlag)
-			});
+				// 틱당 1번만 보내야함
 
-			//player.Move();
+				PacketOperator.Instance.GenerateMovePacket(player.PlayerData.ClientInfo.PlayerID, currentFlag);
+			}
+			player.PlayerData.UpdateMoveFlag(currentFlag);
 
 		}
 	}
