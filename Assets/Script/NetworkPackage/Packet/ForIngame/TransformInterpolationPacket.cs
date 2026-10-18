@@ -15,6 +15,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 	internal struct S2C_TransformInterpolationPacket : IPacket
 	{
 		public EPacketID packetID => EPacketID.S_Transform;
+
 		public List<PlayersPositionSnapshot> Snapshots;
 
 

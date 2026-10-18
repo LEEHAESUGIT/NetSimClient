@@ -125,3 +125,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 007310310a04ba34e92f68d9c9660f0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NETSIM_Ver2.Assets.Script.GamePackage.Object.PlayerObject
+  PlayerData:
+    ClientInfo:
+      PlayerID: 0
+      IsPlayable: 0
+    StatusInfo:
+      MoveSpeed: 0
+      PlayerColor: 0
+      MoveFlag: 0
+    TransformInfo:
+      NowPosition: {x: 0, y: 0, z: 0}
+      NowDirection: {x: 0, y: 0, z: 0}
+      NextPosition: {x: 0, y: 0, z: 0}
+      NextDirection: {x: 0, y: 0, z: 0}

@@ -110,7 +110,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Router.Handle
 			{
 				if (_playerManager.TryGetPlayer(Packet.PlayerID, out Player player))
 				{
-					UnityEngine.Debug.Log($"MovePacket Target:{ Packet.PlayerID}");
+					UnityEngine.Debug.Log($"MovePacket Target:{Packet.PlayerID}");
 					player.UpdateMoveFlag(Packet.MoveFlag);
 				}
 			}
@@ -120,7 +120,18 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Router.Handle
 		{
 			if (context.Packet is S2C_TransformInterpolationPacket Packet)
 			{
-				// TODO
+				foreach (var snapshot in Packet.Snapshots)
+				{
+					if (_playerManager.TryGetPlayer(snapshot.PlayerID, out Player player))
+					{
+						//if (player.ClientInfo.IsPlayable)
+						//	continue;
+						player.InterpolationInfo.InputInterpolationData(
+							new Vector3(snapshot.PosX, snapshot.PosY, snapshot.PosZ),
+							new Vector3(snapshot.DirX, snapshot.DirY, snapshot.DirZ));
+
+					}
+				}
 			}
 		}
 	}

@@ -13,5 +13,8 @@ namespace NETSIM_Ver2.Assets.Script.Configration
 
 		public const int SessionMin = 0;
 		public const int SessionMax = 8;
+
+		public const int TickRate = 64;
+		public const int InterpolationTickUnit = 10;
 	}
 }

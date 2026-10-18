@@ -17,15 +17,16 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Object
 		internal StatusInfo StatusInfo;
 		[SerializeField]
 		internal TransformInfo TransformInfo;
-
-
-		internal Action OnMoveTick;
+		[SerializeField]
+		internal InterpolationInfo InterpolationInfo;
 
 		internal Player()
 		{
 			this.ClientInfo = new ClientInfo();
 			this.StatusInfo = new StatusInfo();
 			this.TransformInfo = new TransformInfo();
+			this.InterpolationInfo = new InterpolationInfo(CalculationCoordinate);
+
 		}
 
 		internal void Init(ClientInfo clientInfoInit , StatusInfo statusInfoInit , TransformInfo transformInfo)
@@ -45,10 +46,15 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Object
 		internal void UpdateMoveFlag(EMoveDirFlag moveflag)
 		{
 			this.StatusInfo.MoveFlag = moveflag;
-			//OnMoveTick.Invoke();
-
 		}
 
+		internal void CalculationCoordinate()
+		{
+			this.InterpolationInfo.CalculationCoordinateError(
+				this.TransformInfo.NowPosition,
+				this.TransformInfo.NowDirection
+				);
+		}
 
 
 	}

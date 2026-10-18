@@ -6,6 +6,7 @@ using NETSIM_Ver2.Assets.Script.GamePackage.Function;
 using NETSIM_Ver2.Assets.Script.GamePackage.MetaData.Enum;
 using NETSIM_Ver2.Assets.Script.NetworkPackage.MetaData.Interface;
 using System.Linq.Expressions;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -24,21 +25,26 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Object
 
 		// PlayerFunction
 		internal IPlayerController _playerController = null;
-
-	
 		private Quaternion _startRotation;
 		private Quaternion _targetRotation = Quaternion.identity;
 
+
+
+		public TextMeshProUGUI TransformOverlay;
+
+
 		internal void Awake()
 		{
-			
+
 		}
 		internal void Update()
 		{
 			if (_playerController != null)
 				_playerController.OnUpdate(this);
-			//OnUpdateMoveTick();
 			Move();
+
+			TransformOverlay.text = $" Pos : {this.transform.position} , Dir : {this.transform.forward}";
+
 		}
 
 
@@ -48,7 +54,6 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Object
 			this.PlayerData = player;
 			this._playerController = playerController;
 
-			PlayerData.OnMoveTick += OnUpdateMoveTick;
 		}
 
 		internal void OnUpdateClientInfo(ClientInfo info)
@@ -59,21 +64,34 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Object
 		{
 			this.PlayerData.StatusInfo = info;
 		}
-		
+
 		internal void OnUpdateMoveTick()
 		{
-			var tempDir = MoveConverter.ToDirection(PlayerData.StatusInfo.MoveFlag);
+			Vector3 tempDir = MoveConverter.ToDirection(PlayerData.StatusInfo.MoveFlag);
 
+			PositionOfTick(tempDir);
+			DirectionOfTick(tempDir);
+			PlayerData.InterpolationInfo.ConsumeTick();
+			_elapsedTime = 0;
+		}
+
+		private void PositionOfTick(Vector3 tempDir)
+		{
 			// Update Target Position
 			this.PlayerData.TransformInfo.NowPosition = this.transform.position;
-			this.PlayerData.TransformInfo.NextPosition += tempDir * (PlayerData.StatusInfo.MoveSpeed * _deltaTime);
 
+			Vector3 currentPos = (tempDir * (PlayerData.StatusInfo.MoveSpeed * _deltaTime) + PlayerData.InterpolationInfo.NowInterpolationPosition());
+
+			this.PlayerData.TransformInfo.NextPosition = this.PlayerData.TransformInfo.NowPosition + currentPos;
+		}
+		private void DirectionOfTick(Vector3 tempDir)
+		{
 			// Update Target Rotation;
 			this.PlayerData.TransformInfo.NowDirection = this.transform.forward;
-			this.PlayerData.TransformInfo.NextDirection = tempDir;
+			this.PlayerData.TransformInfo.NextDirection = tempDir + PlayerData.InterpolationInfo.NowInterpolationDirection();
 
 			this._startRotation = this.transform.rotation;
-			if(PlayerData.TransformInfo.NextDirection.sqrMagnitude > 0.001f)
+			if (PlayerData.TransformInfo.NextDirection.sqrMagnitude > 0.001f)
 			{
 				this._targetRotation = Quaternion.LookRotation(PlayerData.TransformInfo.NextDirection);
 			}
@@ -81,8 +99,6 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Object
 			{
 				this._targetRotation = this._startRotation;
 			}
-
-			_elapsedTime = 0;
 		}
 
 		internal void Move()
