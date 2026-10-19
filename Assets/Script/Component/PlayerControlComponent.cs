@@ -38,8 +38,9 @@ namespace NETSIM_Ver2.Assets.Script.Component
 			if(pastFlag != currentFlag)
 			{
 				// 틱당 1번만 보내야함
+				GamePacketOperator.Instance.GenerateMovePacket(player.PlayerData.ClientInfo.PlayerID, currentFlag);
 
-				PacketOperator.Instance.GenerateMovePacket(player.PlayerData.ClientInfo.PlayerID, currentFlag);
+				pastFlag = currentFlag;
 			}
 			player.PlayerData.UpdateMoveFlag(currentFlag);
 

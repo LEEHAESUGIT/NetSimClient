@@ -67,7 +67,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Router.Handle
 
 		internal void PlayableObjectSpawnResponseHandle(ReceivePacketContext context)
 		{
-			if (context.Packet is S2C_AnsPlayableObjectSpawnResponse Packet)
+			if (context.Packet is S2C_PlayableObjectSpawnResponse Packet)
 			{
 				if (_playerManager.CreatePlayer(Packet.ResponsePlayerID))
 				{
@@ -85,7 +85,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Router.Handle
 		}
 		internal void NonPlayableObjectSpawnResponseHandle(ReceivePacketContext context)
 		{
-			if (context.Packet is S2C_AnsNonPlayableObjectSpawnResponse Packet)
+			if (context.Packet is S2C_NonPlayableObjectSpawnResponse Packet)
 			{
 				if (_playerManager.CreatePlayer(Packet.ResponsePlayerID))
 				{
@@ -93,7 +93,9 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Router.Handle
 						Packet.ResponsePlayerID,
 						new ClientInfo(Packet.ResponsePlayerID, false),
 						new StatusInfo(5f, (EPlayerColor)Packet.TargetColorEnum, EMoveDirFlag.None),
-						new TransformInfo(new Vector3(0, 0, 0), new Vector3(0, 0, 0))
+						new TransformInfo(
+							
+							new Vector3(0, 0, 0), new Vector3(0, 0, 0))
 						);
 
 					UnityEngine.Debug.Log($"{Packet.ResponsePlayerID}");
@@ -124,8 +126,8 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Router.Handle
 				{
 					if (_playerManager.TryGetPlayer(snapshot.PlayerID, out Player player))
 					{
-						//if (player.ClientInfo.IsPlayable)
-						//	continue;
+						if (player.ClientInfo.IsPlayable)
+							continue;
 						player.InterpolationInfo.InputInterpolationData(
 							new Vector3(snapshot.PosX, snapshot.PosY, snapshot.PosZ),
 							new Vector3(snapshot.DirX, snapshot.DirY, snapshot.DirZ));

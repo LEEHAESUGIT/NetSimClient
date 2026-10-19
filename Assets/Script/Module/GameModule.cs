@@ -59,7 +59,7 @@ namespace NETSIM_Ver2.Assets.Script.Module
 
 		internal void Start()
 		{
-			PacketOperator.Instance.GenerateReqPlayableSpawnPacket();
+			//GamePacketOperator.Instance.GeneratePlayableSpawnPacket();
 		}
 
 		

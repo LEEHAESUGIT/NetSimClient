@@ -10,55 +10,79 @@ using System.Threading.Tasks;
 
 namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForSystem
 {
-	internal struct C2SHeartBeat : IPacket
+	internal struct C2S_HeartBeat : IPacket
 	{
 		// Info
 		public EPacketID packetID => EPacketID.C_HeartBeat;
 		// Data
-		public uint Tick { get; set; }
+		public uint Tick { get; private set; }
+		public long WasSendTime { get; private set; }
+		public long ServerTick { get; private set; }
+		public long SessionTick { get; private set; }
 
-		public C2SHeartBeat(uint tick)
-		{ 
-			this.Tick = tick;
-		}
-		public void Serialize(PacketWriter writer)
-		{
-			writer.Write(Tick);	
-		}
-		public static C2SHeartBeat Deserialize(PacketReader reader)
-		{
-			return new C2SHeartBeat
-			{
-				Tick = reader.ReadUInt()
-			};
-		}
-	}
-
-	internal struct S2CHeartBeat : IPacket
-	{
-		// Info
-		public EPacketID packetID => EPacketID.S_HeartBeat;
-		// Data
-		public uint Tick { get; set; }
-
-
-		public S2CHeartBeat(uint tick)
+		public C2S_HeartBeat(uint tick, long sendTime, long serverTick, long sessionTick)
 		{
 			this.Tick = tick;
+			this.WasSendTime = sendTime;
+			this.ServerTick = serverTick;
+			this.SessionTick = sessionTick;
 		}
 		public void Serialize(PacketWriter writer)
 		{
 			writer.Write(Tick);
+			writer.Write(WasSendTime);
+			writer.Write(ServerTick);
+			writer.Write(SessionTick);
 
 		}
-		public static S2CHeartBeat Deserialize(PacketReader reader)
+		public static C2S_HeartBeat Deserialize(PacketReader reader)
 		{
-			return new S2CHeartBeat
+			return new C2S_HeartBeat
 			{
-				Tick = reader.ReadUInt()
-			}; ;
+				Tick = reader.ReadUInt(),
+				WasSendTime = reader.ReadLong(),
+				ServerTick = reader.ReadLong(),
+				SessionTick = reader.ReadLong()
+			};
 		}
 	}
 
+	internal struct S2C_HeartBeat : IPacket
+	{
+		// Info
+		public EPacketID packetID => EPacketID.S_HeartBeat;
+		// Data
+		public uint Tick { get; private set; }
+		public long WasSendTime { get; private set; }
+		public long ServerTick { get; private set; }
+		public long SessionTick { get; private set; }
+
+
+		public S2C_HeartBeat(uint tick, long sendTime, long serverTick, long sessionTick)
+		{
+			this.Tick = tick;
+			this.WasSendTime = sendTime;
+			this.ServerTick = serverTick;
+			this.SessionTick = sessionTick;
+		}
+		public void Serialize(PacketWriter writer)
+		{
+			writer.Write(Tick);
+			writer.Write(WasSendTime);
+			writer.Write(ServerTick);
+			writer.Write(SessionTick);
+
+		}
+		public static S2C_HeartBeat Deserialize(PacketReader reader)
+		{
+			return new S2C_HeartBeat
+			{
+				Tick = reader.ReadUInt(),
+				WasSendTime = reader.ReadLong(),
+				ServerTick = reader.ReadLong(),
+				SessionTick = reader.ReadLong()
+			};
+		}
+	}
 }
 

@@ -95,17 +95,19 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Socket
 			}
 			if (_stream != null && !_sessionCts.IsCancellationRequested)
 			{
+				SystemPacketOperator.Instance.GenerateInitSessionRequestPacket();
 				_ = SendLoopAsync();
 				_ = ReceivedLoopAsync();
 
 				// TODO 
 				// 패킷 전송 타이밍을 세션내부가 아닌 외부에서 
-
-				_modulePipe.SystemPacketPipe.OutBoundPipe.TryWrite(
-					new ResultPacketContext
-					{
-						Packet = new C2S_InitRequest(0)
-					});
+				long unixTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+				SystemPacketOperator.Instance.GenerateHeartbeatPacket(unixTime , 0,0);
+				//_modulePipe.SystemPacketPipe.OutBoundPipe.TryWrite(
+				//	new ResultPacketContext
+				//	{
+				//		Packet = new C2S_InitRequest(0)
+				//	});
 				
 			}
 		}
@@ -203,7 +205,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Socket
 			while (true)
 			{
 				// 최소 헤더 크기
-				if (_packetBuffer.Recv.Datasize < 4) return;
+				if (_packetBuffer.Recv.Datasize < 6) return;
 
 				// 헤더 크기 파싱
 				ushort PacketSize = BinaryPrimitives.ReadUInt16LittleEndian(_packetBuffer.Recv.ReadSpace);

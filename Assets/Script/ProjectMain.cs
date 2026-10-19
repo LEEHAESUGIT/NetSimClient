@@ -24,12 +24,15 @@ namespace NETSIM_Ver2.Assets.Script
 			this._modulePipe = new ModulePipe();
 			this._networkModule = new NetworkModule(_modulePipe , _projectCTS);
 
-			this.GameBehaviour.Init(_modulePipe.GamePacketPipe , _projectCTS);
+			this.GameBehaviour.Init(_modulePipe , _projectCTS);
+
+
+			//this._networkModule.Start();
 		}
 
 		private void Start()
 		{
-			if(this._networkModule.Start())
+			if (this._networkModule.Start())
 			{
 				this.GameBehaviour.CallStart();
 			}

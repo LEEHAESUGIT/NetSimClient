@@ -6,18 +6,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine.Rendering;
 
 namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 {
 	#region Playable
-	internal struct C2S_ReqPlayableObjectSpawnRequest : IPacket
+	internal struct C2S_PlayableObjectSpawnRequest : IPacket
 	{
 		// Info
 		public EPacketID packetID => EPacketID.C_PlayableObjectSpawn;
-
 		public uint Tick { get; private set; }
 
-		public C2S_ReqPlayableObjectSpawnRequest(uint tick)
+		public C2S_PlayableObjectSpawnRequest(uint tick)
 		{
 			this.Tick = tick;
 		}
@@ -26,15 +26,17 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 		{
 			writer.Write(Tick);
 		}
-		public static C2S_ReqPlayableObjectSpawnRequest Deserialize(PacketReader reader)
+
+		public static C2S_PlayableObjectSpawnRequest Deserialize(PacketReader reader)
 		{
-			return new C2S_ReqPlayableObjectSpawnRequest
+			return new C2S_PlayableObjectSpawnRequest
 			{
 				Tick = reader.ReadUInt()
 			};
 		}
 	}
-	internal struct S2C_AnsPlayableObjectSpawnResponse : IPacket
+
+	internal struct S2C_PlayableObjectSpawnResponse : IPacket
 	{
 		// Info
 		public EPacketID packetID => EPacketID.S_PlayableObjectSpawn;
@@ -43,14 +45,13 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 		public int ResponsePlayerID { get; private set; }
 		public int TargetColorEnum { get; private set; }
 
-		public S2C_AnsPlayableObjectSpawnResponse(uint tick, int sessionID, int issuanceID, int colorEnum)
+		public S2C_PlayableObjectSpawnResponse(uint tick, int sessionID, int issuanceID, int colorEnum)
 		{
 			this.Tick = tick;
 			this.TargetSessionID = sessionID;
 			this.ResponsePlayerID = issuanceID;
 			this.TargetColorEnum = colorEnum;
 		}
-
 
 		public void Serialize(PacketWriter writer)
 		{
@@ -59,9 +60,10 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 			writer.Write(ResponsePlayerID);
 			writer.Write(TargetColorEnum);
 		}
-		public static S2C_AnsPlayableObjectSpawnResponse Deserialize(PacketReader reader)
+
+		public static S2C_PlayableObjectSpawnResponse Deserialize(PacketReader reader)
 		{
-			return new S2C_AnsPlayableObjectSpawnResponse
+			return new S2C_PlayableObjectSpawnResponse
 			{
 				Tick = reader.ReadUInt(),
 				TargetSessionID = reader.ReadInt(),
@@ -72,56 +74,61 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 	}
 	#endregion
 	#region NonPlayable
-	internal struct C2S_ReqNonPlayableObjectSpawnRequest : IPacket
+	internal struct C2S_NonPlayableObjectSpawnRequest : IPacket
 	{
 		// Info
 		public EPacketID packetID => EPacketID.C_NonPlayableObjectSpawn;
-		//public int TargetSessionID { get; private set; }
-		public C2S_ReqNonPlayableObjectSpawnRequest(int sessionID)
-		{
-			//this.TargetSessionID = sessionID;
-		}
+		public uint Tick { get; private set; }
 
+		public C2S_NonPlayableObjectSpawnRequest(uint tick)
+		{
+			this.Tick = tick;
+		}
 
 		public void Serialize(PacketWriter writer)
 		{
-			//writer.Write(TargetSessionID);
+			writer.Write(Tick);
 		}
-		public static C2S_ReqNonPlayableObjectSpawnRequest Deserialize(PacketReader reader)
+
+		public static C2S_NonPlayableObjectSpawnRequest Deserialize(PacketReader reader)
 		{
-			return new C2S_ReqNonPlayableObjectSpawnRequest
+			return new C2S_NonPlayableObjectSpawnRequest
 			{
-				//TargetSessionID = reader.ReadInt()
+				Tick = reader.ReadUInt()
 			};
 		}
 	}
-	internal struct S2C_AnsNonPlayableObjectSpawnResponse : IPacket
+	internal struct S2C_NonPlayableObjectSpawnResponse : IPacket
 	{
 		// Info
 		public EPacketID packetID => EPacketID.S_NonPlayableObjectSpawn;
 
+		public uint Tick { get; private set; }
 		public int TargetSessionID { get; private set; }
 		public int ResponsePlayerID { get; private set; }
 		public int TargetColorEnum { get; private set; }
 
-		public S2C_AnsNonPlayableObjectSpawnResponse(int sessionID, int issuanceID, int colorEnum)
+		public S2C_NonPlayableObjectSpawnResponse(uint tick, int sessionID, int issuanceID, int colorEnum)
 		{
+			this.Tick = tick;
 			this.TargetSessionID = sessionID;
 			this.ResponsePlayerID = issuanceID;
 			this.TargetColorEnum = colorEnum;
 		}
 
-
 		public void Serialize(PacketWriter writer)
 		{
+			writer.Write(Tick);
 			writer.Write(TargetSessionID);
 			writer.Write(ResponsePlayerID);
 			writer.Write(TargetColorEnum);
 		}
-		public static S2C_AnsNonPlayableObjectSpawnResponse Deserialize(PacketReader reader)
+
+		public static S2C_NonPlayableObjectSpawnResponse Deserialize(PacketReader reader)
 		{
-			return new S2C_AnsNonPlayableObjectSpawnResponse
+			return new S2C_NonPlayableObjectSpawnResponse
 			{
+				Tick = reader.ReadUInt(),
 				TargetSessionID = reader.ReadInt(),
 				ResponsePlayerID = reader.ReadInt(),
 				TargetColorEnum = reader.ReadInt()

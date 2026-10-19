@@ -16,16 +16,19 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 	{
 		public EPacketID packetID => EPacketID.S_Transform;
 
-		public List<PlayersPositionSnapshot> Snapshots;
+		public uint Tick { get; private set; }
+		public List<PlayersPositionSnapshot> Snapshots { get; private set; }
 
 
-		public S2C_TransformInterpolationPacket(List<PlayersPositionSnapshot> snapshot)
+		public S2C_TransformInterpolationPacket(uint tick, List<PlayersPositionSnapshot> snapshots)
 		{
-			this.Snapshots = snapshot;
+			this.Tick = tick;
+			this.Snapshots = snapshots;
 		}
 
 		public void Serialize(PacketWriter writer)
 		{
+			writer.Write(Tick);
 			writer.Write((ushort)Snapshots.Count);
 			foreach (var snapshot in Snapshots)
 			{
@@ -42,6 +45,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 
 		public static S2C_TransformInterpolationPacket Deserialize(PacketReader reader)
 		{
+			uint tick = reader.ReadUInt();
 			int snapshotCount = (int)reader.ReadUshort();
 			List<PlayersPositionSnapshot> temp = new(snapshotCount);
 
@@ -59,8 +63,10 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.ForIngame
 					reader.ReadFloat()
 				));
 			}
+
 			return new S2C_TransformInterpolationPacket
 			{
+				Tick = tick,
 				Snapshots = temp
 			};
 		}

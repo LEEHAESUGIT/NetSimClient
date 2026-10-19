@@ -37,7 +37,7 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Object
 		{
 
 		}
-		internal void Update()
+		internal void FixedUpdate()
 		{
 			if (_playerController != null)
 				_playerController.OnUpdate(this);
@@ -77,12 +77,26 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage.Object
 
 		private void PositionOfTick(Vector3 tempDir)
 		{
-			// Update Target Position
-			this.PlayerData.TransformInfo.NowPosition = this.transform.position;
 
-			Vector3 currentPos = (tempDir * (PlayerData.StatusInfo.MoveSpeed * _deltaTime) + PlayerData.InterpolationInfo.NowInterpolationPosition());
+			if (PlayerData.ClientInfo.IsPlayable)
+			{
+				// Update Target Position
+				this.PlayerData.TransformInfo.NowPosition = this.transform.position;
 
-			this.PlayerData.TransformInfo.NextPosition = this.PlayerData.TransformInfo.NowPosition + currentPos;
+				Vector3 currentPos = (tempDir * (PlayerData.StatusInfo.MoveSpeed * _deltaTime) + PlayerData.InterpolationInfo.NowInterpolationPosition());
+
+
+				this.PlayerData.TransformInfo.NextPosition = this.PlayerData.TransformInfo.NowPosition + currentPos;
+			}
+			else
+			{
+				this.PlayerData.TransformInfo.NowPosition = this.transform.position;
+
+				Vector3 currentPos = PlayerData.InterpolationInfo.NowInterpolationPosition();
+
+				this.PlayerData.TransformInfo.NextPosition = this.PlayerData.TransformInfo.NowPosition + currentPos;
+			}
+
 		}
 		private void DirectionOfTick(Vector3 tempDir)
 		{

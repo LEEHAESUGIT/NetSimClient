@@ -136,7 +136,7 @@ namespace NETSIM_Ver2.Assets.Script.GamePackage
 			if (RemainingTicks > 0)
 			{
 				
-				return OnTickPosition;
+				return OnTickDirection;
 			}
 			return Vector3.zero;
 		}

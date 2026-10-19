@@ -73,8 +73,8 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.Tool
 			// TODO: [Perf Optimization]
 			// 현재 Func<PacketReader, IPacket> 반환 시 struct -> interface 캐스팅으로 인한 Boxing(GC Alloc) 발생 중.
 			// 추후 Action<Session, PacketReader> 기반의 In-place 파싱 및 핸들러 직접 호출 구조로 전환하여 제로 알로케이션 달성할 것.
-			tempInitParseMap.Add(EPacketID.S_PlayableObjectSpawn, (_packetReader) => S2C_AnsPlayableObjectSpawnResponse.Deserialize(_packetReader));
-			tempInitParseMap.Add(EPacketID.S_NonPlayableObjectSpawn, (_packetReader) => S2C_AnsNonPlayableObjectSpawnResponse.Deserialize(_packetReader));
+			tempInitParseMap.Add(EPacketID.S_PlayableObjectSpawn, (_packetReader) => S2C_PlayableObjectSpawnResponse.Deserialize(_packetReader));
+			tempInitParseMap.Add(EPacketID.S_NonPlayableObjectSpawn, (_packetReader) => S2C_NonPlayableObjectSpawnResponse.Deserialize(_packetReader));
 
 			tempInitParseMap.Add(EPacketID.S_LivePlayerRenewal, (_packetReader) => S2C_LivePlayerRenewalPacket.Deserialize(_packetReader));
 
@@ -82,7 +82,7 @@ namespace NETSIM_Ver2.Assets.Script.NetworkPackage.Packet.Tool
 			tempInitParseMap.Add(EPacketID.S_Transform, (_packetReader) => S2C_TransformInterpolationPacket.Deserialize(_packetReader));
 
 
-			tempInitParseMap.Add(EPacketID.S_HeartBeat, (_packetReader) => S2CHeartBeat.Deserialize(_packetReader));
+			tempInitParseMap.Add(EPacketID.S_HeartBeat, (_packetReader) => S2C_HeartBeat.Deserialize(_packetReader));
 			tempInitParseMap.Add(EPacketID.S_Init, (_packetReader) => S2C_InitResponse.Deserialize(_packetReader));
 
 
